@@ -14,11 +14,11 @@ from django.contrib.auth.models import (
 class UserManager(BaseUserManager):
     """Manager for users."""
 
-    def create_user(self, EmailAddress, password=None, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields):
         """Create, save and return a new user."""
-        if not EmailAddress:
+        if not email:
             raise ValueError('User must have an email address.')
-        user = self.model(EmailAddress=self.normalize_email(EmailAddress), **extra_fields)
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -27,15 +27,15 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system."""
-    EmailAddress = models.EmailField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
     FirstName = models.CharField(max_length=50)
-    LastName = models.CharField(max_length=50)
-    UserName = models.CharField(max_length=50)
-    BirthDay = models.DateField(null=False)
-    Country = models.CharField(max_length=60)
-    PhoneNumber = models.CharField(max_length=20)
-    JobType = models.CharField(max_length=50)
+    LastName = models.CharField(max_length=50, null=True)
+    UserName = models.CharField(max_length=50, null=True)
+    BirthDay = models.DateField(null=True)
+    Country = models.CharField(max_length=60, null=True)
+    PhoneNumber = models.CharField(max_length=20, null=True)
+    JobType = models.CharField(max_length=50, null=True)
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'EmailAddress'
+    USERNAME_FIELD = 'email'

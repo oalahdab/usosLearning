@@ -15,8 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ["__all__"]
-        extra_kwargs = {'Password': {'write_only': True, 'min_length': 5}}
+        fields = ['email', 'FirstName', 'LastName', 'UserName', 'BirthDay', 'Country' , 'PhoneNumber', 'JobType']
+        extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
         """Create and return a user with encrypted password."""
@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Update and return user."""
-        password = validated_data.pop('Password', None)
+        password = validated_data.pop('password', None)
         user = super().update(instance, validated_data)
 
         if password:
@@ -36,16 +36,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user auth token."""
-    EmailAddress = serializers.EmailField()
-    Password = serializers.CharField(
+    email = serializers.EmailField()
+    password = serializers.CharField(
         style={'input_type': 'password'},
         trim_whitespace=False,
     )
 
     def validate(self, attrs):
         """Validate and authenticate the user."""
-        email = attrs.get('EmailAddress')
-        password = attrs.get('Password')
+        email = attrs.get('email')
+        password = attrs.get('password')
         user = authenticate(
             request=self.context.get('request'),
             UserName=email,
