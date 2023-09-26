@@ -15,7 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ['email', 'FirstName', 'LastName', 'UserName', 'BirthDay', 'Country' , 'PhoneNumber', 'JobType']
+        fields = ['id', 'email', 'FirstName', 'LastName', 'UserName',
+                'BirthDay', 'Country' , 'PhoneNumber', 'JobType', 'password']
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
@@ -34,8 +35,8 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class AuthTokenSerializer(serializers.Serializer):
-    """Serializer for the user auth token."""
+class AuthBasicSerializer(serializers.Serializer):
+    """Serializer for the user auth basic."""
     email = serializers.EmailField()
     password = serializers.CharField(
         style={'input_type': 'password'},
@@ -48,7 +49,7 @@ class AuthTokenSerializer(serializers.Serializer):
         password = attrs.get('password')
         user = authenticate(
             request=self.context.get('request'),
-            UserName=email,
+            user=email,
             password=password,
         )
         if not user:

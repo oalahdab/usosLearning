@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: DJANGO DRF APIs
+  version: 0.0.0
+paths:
+  /api/user/create/:
+    post:
+      operationId: api_user_create_create
+      description: Create a new user in the system.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/user/me/:
+    get:
+      operationId: api_user_me_retrieve
+      description: Manage the authenticated user.
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: api_user_me_update
+      description: Manage the authenticated user.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: api_user_me_partial_update
+      description: Manage the authenticated user.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/user/token/:
+    post:
+      operationId: api_user_token_create
+      description: Create a new auth token for user.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+components:
+  schemas:
+    AuthToken:
+      type: object
+      description: Serializer for the user auth token.
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+      - email
+      - password
+    PatchedUser:
+      type: object
+      description: Serializer for the user object.
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        FirstName:
+          type: string
+          maxLength: 50
+        LastName:
+          type: string
+          nullable: true
+          maxLength: 50
+        UserName:
+          type: string
+          nullable: true
+          maxLength: 50
+        BirthDay:
+          type: string
+          format: date
+          nullable: true
+        Country:
+          type: string
+          nullable: true
+          maxLength: 60
+        PhoneNumber:
+          type: string
+          nullable: true
+          maxLength: 20
+        JobType:
+          type: string
+          nullable: true
+          maxLength: 50
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+          minLength: 5
+    User:
+      type: object
+      description: Serializer for the user object.
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        FirstName:
+          type: string
+          maxLength: 50
+        LastName:
+          type: string
+          nullable: true
+          maxLength: 50
+        UserName:
+          type: string
+          nullable: true
+          maxLength: 50
+        BirthDay:
+          type: string
+          format: date
+          nullable: true
+        Country:
+          type: string
+          nullable: true
+          maxLength: 60
+        PhoneNumber:
+          type: string
+          nullable: true
+          maxLength: 20
+        JobType:
+          type: string
+          nullable: true
+          maxLength: 50
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+          minLength: 5
+      required:
+      - FirstName
+      - email
+      - password
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
