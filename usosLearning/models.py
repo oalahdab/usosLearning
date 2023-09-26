@@ -1,6 +1,7 @@
 """
 Database models.
 """
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -33,13 +34,14 @@ class UserManager(BaseUserManager):
         """Create and return a new superuser"""
         user = self.create_user(email, password)
         user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
-
+    
 
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system."""
-    id = models.IntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     email = models.EmailField(max_length=255, unique=True)
     FirstName = models.CharField(max_length=50)
     LastName = models.CharField(max_length=50, null=True)
@@ -54,3 +56,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+class Course(models.Model):
+    """Course object"""
+    instructor = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    lessonCount = models.CharField(max_length=50)
+    subject = models.CharField(max_length=255)
+    imageURL = models.CharField(max_length=255)
+    lastUpdate = models.DateTimeField()
+    duration = models.TimeField()
+    enrollmentCount = models.IntegerField()
+    targetAudience = models.CharField(max_length=255)
+    videoURL = models.CharField(max_length=255)
+    language = models.CharField(max_length=255)
+    price = models.IntegerField()
+    discount = models.IntegerField()
+    
+    def __str__(self):
+        return self.title

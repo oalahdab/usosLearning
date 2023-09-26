@@ -26,7 +26,7 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_success(self):
         """Test creating a user is successful."""
-        payload = { 
+        payload = {
             'email': 'test@example.com',
             'password': 'testpass123',
             'FirstName': 'Test',
@@ -61,8 +61,8 @@ class PublicUserApiTests(TestCase):
     def test_create_superuser(self):
         """Test creating a superuser."""
         user = get_user_model().objects.create_superuser(
-            'test@example.com',
-            'test123',
+             'superuser@example.com',
+             'testpass123',
         )
 
         self.assertTrue(user.is_superuser)

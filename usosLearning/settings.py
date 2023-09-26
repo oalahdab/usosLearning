@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'usosLearning',
     'rest_framework_swagger',
     'drf_spectacular',
+    'course',
 #   'drf_yasg',
 ]
 
