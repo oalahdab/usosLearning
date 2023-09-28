@@ -16,5 +16,5 @@ router.register('course', views.CourseViewSet)
 app_name = 'course'
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
 ]
