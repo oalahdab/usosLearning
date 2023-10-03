@@ -56,7 +56,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-
+    def __str__(self):
+        return self.email
 
 class Course(models.Model):
     """Course object"""
@@ -64,7 +65,7 @@ class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     lessonCount = models.CharField(max_length=50)
-    subject = models.CharField(max_length=255)
+    subjectId = models.IntegerField()
     imageURL = models.CharField(max_length=255)
     lastUpdate = models.DateTimeField()
     duration = models.TimeField()
@@ -77,3 +78,11 @@ class Course(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class Instructor(models.Model):
+    fullName = models.CharField(max_length=255)
+    profession = models.CharField(max_length=255)
+    imageURL = models.CharField(max_length=255)
+    socialMediaLink1 = models.CharField(max_length=255)
+    socialMediaLink2 = models.CharField(max_length=255)

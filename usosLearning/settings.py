@@ -136,18 +136,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'usosLearning.User'
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS':
-        'drf_spectacular.openapi.AutoSchema',
-
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': "rest_framework.pagination.PageNumberPagination",
 }
 
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'DJANGO DRF APIs',
+    'DESCRIPTION': 'UsosLearning Endpoints',
 
 }

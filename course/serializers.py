@@ -2,8 +2,7 @@
 """
 from rest_framework import serializers
 
-from usosLearning.models import Course
-
+from usosLearning.models import Course, Instructor
 
 class CourseSerializer(serializers.ModelSerializer):
     """Serializer for courses."""
@@ -11,6 +10,16 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['id', 'instructor','title','description','lessonCount',
-                  'subject','imageURL','lastUpdate','duration','enrollmentCount',
+                  'subjectId','imageURL','lastUpdate','duration','enrollmentCount',
                   'targetAudience','videoURL','language','price','discount']
+        read_only_fields = ['id']
+
+
+class InstructorSerializer(serializers.ModelSerializer):
+    """Serializers for instructors"""
+
+    class Meta:
+        model = Instructor
+        fields = ['id', 'fullName', 'profession', 'imageURL', 
+                  'socialMediaLink1', 'socialMediaLink2']
         read_only_fields = ['id']
