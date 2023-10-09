@@ -2,14 +2,11 @@
 Views for the course APIs.
 """
 from rest_framework.authentication import  BasicAuthentication
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 
-from drf_yasg.utils import swagger_auto_schema
-
-
-from usosLearning.models import Course,Instructor
+from usosLearning.models import Course,Instructor, Tag
 
 from course import serializers
 from course.pagination import CustomPageNumberPagination
@@ -22,11 +19,6 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     authentication_classes = [BasicAuthentication]
     pagination_class = CustomPageNumberPagination
-
-    @swagger_auto_schema(
-        operation_description="Description for the list (GET) endpoint",
-        tags=["Header 1"]
-    )
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -46,15 +38,26 @@ class CourseViewSet(viewsets.ModelViewSet):
 class CoursesBySubjectView(ListAPIView):
     """Get couses by subject"""
     serializer_class = CourseSerializer
+    pagination_class = None
 
     def get_queryset(self):
-        subject_number = self.kwargs['subject_number']
-        queryset = Course.objects.filter(subject=subject_number)
+        subjectId = self.kwargs['subjectId']
+        queryset = Course.objects.filter(subjectId=subjectId)
         return queryset
 
 class InstructorViewSet(viewsets.ModelViewSet):
     """View for manage course APIs."""
-    serializer_class = serializers.CourseSerializer
+    serializer_class = serializers.InstructorSerializer
     queryset = Instructor.objects.all()
+    authentication_classes = [BasicAuthentication]
+    pagination_class = None
+
+class TagViewSet(mixins.UpdateModelMixin, 
+                 mixins.ListModelMixin, 
+                 viewsets.GenericViewSet,
+                 mixins.DestroyModelMixin):
+    """Manage tags in the database"""
+    serializer_class = serializers.TagSerializer
+    queryset = Tag.objects.all()
     authentication_classes = [BasicAuthentication]
     pagination_class = None
